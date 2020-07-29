@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "1043256236217",
+    "firebase_url": "https://quiz-app-c9bf3.firebaseio.com",
+    "project_id": "quiz-app-c9bf3",
+    "storage_bucket": "quiz-app-c9bf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043256236217:android:07a8534e8b3fdde3c4e368",
+        "android_client_info": {
+          "package_name": "com.jsc.quizadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043256236217-skdk8vd9uh5na4mv9esbie189kqt580p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVJQ7MzMqjU-bM7dnj4TieSv9AliPFlFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043256236217-skdk8vd9uh5na4mv9esbie189kqt580p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043256236217:android:a7def238c418e97fc4e368",
+        "android_client_info": {
+          "package_name": "com.jsc.quizapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043256236217-crr4jv6067evpf5521g3u7htfk0e37lc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jsc.quizapp",
+            "certificate_hash": "db37c3ac52fba8a6e91190daa02e49ccf40cdbd0"
+          }
+        },
+        {
+          "client_id": "1043256236217-skdk8vd9uh5na4mv9esbie189kqt580p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVJQ7MzMqjU-bM7dnj4TieSv9AliPFlFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043256236217-skdk8vd9uh5na4mv9esbie189kqt580p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
