@@ -11,7 +11,7 @@
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/titleTextViewId"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/crimson_text"
@@ -30,7 +30,7 @@
         android:text="Quiz Title"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/backButton"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
         app:layout_constraintEnd_toStartOf="@+id/visibilityButtonId"
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="@+id/backButton" />
@@ -44,6 +44,7 @@
         android:fontFamily="@font/work_sans"
         android:text="PRIVATE"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/titleTextViewId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/titleTextViewId"

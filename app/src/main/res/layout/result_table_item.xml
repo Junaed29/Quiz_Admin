@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/idTextViewInTable">
+
+    <TextView
+        android:id="@+id/questionItemTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:text=" What's the name of our country?"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/actualItemTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/actualItemTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:text="Actual \nAnswer"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/questionItemTextView"
+        app:layout_constraintEnd_toStartOf="@+id/selectedItemTextView"
+        app:layout_constraintStart_toEndOf="@+id/questionItemTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/selectedItemTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:text="Selected \nAnswer"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/actualItemTextView"
+        app:layout_constraintEnd_toStartOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/actualItemTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectedItemTextView" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="1dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/selectedItemTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/selectedItemTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,4 +57,10 @@ dependencies {
     //Number Picker
     implementation 'com.shawnlin:number-picker:2.4.10'
 
+
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'gun0912.ted:tedpermission:2.2.3'
+
+
+
 }

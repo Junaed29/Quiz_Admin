@@ -21,7 +21,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.jsc.quizadmin.R;
+import com.jsc.quizadmin.model.CollectionNameModel;
 import com.jsc.quizadmin.model.QuestionModel;
 import com.shawnlin.numberpicker.NumberPicker;
 
@@ -32,13 +38,13 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
 
     private NavController navController;
 
-    String quizTitle, visibility, documentId;
+    String quizTitle, visibility, documentId, batch, courseId, dept;
 
     NumberPicker numberPicker;
 
     String question = "", answer = "", otherOptionOne = "", otherOptionTwo = "", otherOptionThree = "", timerText = "";
 
-    String option_a = "",option_b = "",option_c= "", option_d = "";
+    String option_a = "",option_b = "",option_c= "";
     int answeringTime = 0;
 
     TextView titleTextView;
@@ -52,9 +58,7 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
     LinearLayout otherOption2LinearLayout;
     LinearLayout otherOption3LinearLayout;
 
-    boolean isPublic = false;
 
-    Button visibilityButton;
     Button saveButton;
 
 
@@ -87,17 +91,19 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
 
         navController = Navigation.findNavController(view);
 
-        //questionDetailsModel = QuestionOperationFragmentArgs.fromBundle(getArguments()).getQuestionDetails();
+
         quizTitle = QuestionOperationFragmentArgs.fromBundle(getArguments()).getQuizTitle();
-        visibility = QuestionOperationFragmentArgs.fromBundle(getArguments()).getVisibility();
         documentId = QuestionOperationFragmentArgs.fromBundle(getArguments()).getDocumentId();
+        batch = QuestionOperationFragmentArgs.fromBundle(getArguments()).getBatch();
+        courseId = QuestionOperationFragmentArgs.fromBundle(getArguments()).getCourseId();
+        dept = QuestionOperationFragmentArgs.fromBundle(getArguments()).getDept();
 
 
-        questionEditText = view.findViewById(R.id.questionEditText);
-        answerEditText = view.findViewById(R.id.answerEditText);
-        otherOption1EditText = view.findViewById(R.id.otherOption_1EditText);
-        otherOption2EditText = view.findViewById(R.id.otherOption_2EditText);
-        otherOption3EditText = view.findViewById(R.id.otherOption_3EditText);
+        questionEditText        = view.findViewById(R.id.questionEditText);
+        answerEditText              = view.findViewById(R.id.answerEditText);
+        otherOption1EditText        = view.findViewById(R.id.otherOption_1EditText);
+        otherOption2EditText        = view.findViewById(R.id.otherOption_2EditText);
+        otherOption3EditText        = view.findViewById(R.id.otherOption_3EditText);
 
         titleTextView = view.findViewById(R.id.titleTextViewId);
 
@@ -114,28 +120,33 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
         backImageButton = view.findViewById(R.id.backButton);
 
 
-        visibilityButton = view.findViewById(R.id.visibilityButtonId);
+//        visibilityButton = view.findViewById(R.id.visibilityButtonId);
+//
+//        if (isFromQuestionList){
+//            visibilityButton.setVisibility(View.GONE);
+//        }
+
         saveButton = view.findViewById(R.id.button);
 
 
         titleTextView.setText(quizTitle);
 
 
-        if (visibility.equals("public")) {
-            isPublic = true;
-            visibilityButton.setText("Public");
-            visibility = "public";
-            visibilityButton.setBackground(getResources().getDrawable(R.drawable.public_btn_bg, null));
-        } else {
-            isPublic = false;
-            visibilityButton.setText("Private");
-            visibility = "private";
-            visibilityButton.setBackground(getResources().getDrawable(R.drawable.private_btn_bg, null));
-        }
+//        if (visibility.equals("public")) {
+//            isPublic = true;
+//            visibilityButton.setText("Public");
+//            visibility = "public";
+//            visibilityButton.setBackground(getResources().getDrawable(R.drawable.public_btn_bg, null));
+//        } else {
+//            isPublic = false;
+//            visibilityButton.setText("Private");
+//            visibility = "private";
+//            visibilityButton.setBackground(getResources().getDrawable(R.drawable.private_btn_bg, null));
+//        }
 
 
         saveButton.setOnClickListener(this);
-        visibilityButton.setOnClickListener(this);
+//        visibilityButton.setOnClickListener(this);
         backImageButton.setOnClickListener(this);
         removeImageButton.setOnClickListener(this);
         addImageButton.setOnClickListener(this);
@@ -215,27 +226,29 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
                 break;
             }
 
-            case R.id.visibilityButtonId: {
-                isPublic = !isPublic;
-                if (isPublic) {
-                    visibilityButton.setText("Public");
-                    visibility = "public";
-                    visibilityButton.setBackground(getResources().getDrawable(R.drawable.public_btn_bg, null));
-                    Toasty.info(getContext(), "QUIZ IS NOW PUBLIC", Toast.LENGTH_SHORT).show();
-                } else {
-                    visibilityButton.setText("Private");
-                    visibility = "private";
-                    visibilityButton.setBackground(getResources().getDrawable(R.drawable.private_btn_bg, null));
-                    Toasty.info(getContext(), "QUIZ IS NOW PRIVATE", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
+//            case R.id.visibilityButtonId: {
+//                isPublic = !isPublic;
+//                if (isPublic) {
+//                    visibilityButton.setText("Public");
+//                    visibility = "public";
+//                    visibilityButton.setBackground(getResources().getDrawable(R.drawable.public_btn_bg, null));
+//                    Toasty.info(getContext(), "QUIZ IS NOW PUBLIC", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    visibilityButton.setText("Private");
+//                    visibility = "private";
+//                    visibilityButton.setBackground(getResources().getDrawable(R.drawable.private_btn_bg, null));
+//                    Toasty.info(getContext(), "QUIZ IS NOW PRIVATE", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            }
         }
     }
 
     void setPreviewDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.preview_dialog);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+        dialog.setCanceledOnTouchOutside(false);
 
         answeringTime = numberPicker.getValue();
 
@@ -270,15 +283,36 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
             optionFourButton.setText(otherOptionThree);
         }
 
-        option_a = answer;
-        option_b = otherOptionOne;
-        option_c = otherOptionTwo;
-        option_d = otherOptionThree;
+        option_a = otherOptionOne;
+        option_b = otherOptionTwo;
+        option_c = otherOptionThree;
 
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuestionModel questionModel = new QuestionModel(question, answer,option_a,option_b,option_c,option_d,answeringTime );
+
+                QuestionModel questionModel = new QuestionModel(question, answer,option_a,option_b,option_c,answeringTime );
+
+                FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
+                        .document(documentId)
+                        .collection(CollectionNameModel.Question_COLLECTION_NAME)
+                        .add(questionModel)
+                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()){
+                                    Toasty.success(getContext(),"Question Set Successful",Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
+                                    QuestionOperationFragmentDirections.ActionQuestionOperationFragmentToAllQuestionListFragment action = QuestionOperationFragmentDirections.actionQuestionOperationFragmentToAllQuestionListFragment();
+                                    action.setCategoryDocumentId(documentId);
+                                    action.setQuizTitle(quizTitle);
+                                    action.setBatch(batch);
+                                    action.setDept(dept);
+                                    action.setCourseId(courseId);
+                                    navController.navigate(action);
+                                }
+                            }
+                        });
 
                 Toasty.success(getContext(),questionModel.toString(),Toast.LENGTH_LONG).show();
 

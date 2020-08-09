@@ -7,37 +7,34 @@ public class QuestionModel {
     @DocumentId
     private String questionId;
 
-    private String question, answer, option_a, option_b, option_c, option_d;
+    private String question, answer, option_a, option_b, option_c;
     private long timer;
 
     public QuestionModel() {
     }
 
-//    public QuestionModel(String question, String option_a, String option_b, String answer, long timer) {
-//        this.question = question;
-//        this.option_a = option_a;
-//        this.option_b = option_b;
-//        this.option_c = "null";
-//        this.option_d = "null";
-//        this.answer = answer;
-//        this.timer = timer;
-//    }
 
-    public QuestionModel(String question, String answer, String option_a, String option_b, String option_c, String option_d,  long timer) {
+
+    public QuestionModel(String question, String answer, String option_a, String option_b, String option_c, long timer) {
         this.question = question;
         this.option_a = option_a;
-        this.option_b = option_b;
         if (option_c.isEmpty()) {
             this.option_c = "null";
         } else {
             this.option_c = option_c;
         }
 
-        if (option_d.isEmpty()) {
-            this.option_d = "null";
+        if (option_b.isEmpty()) {
+            this.option_b = "null";
         } else {
-            this.option_d = option_d;
+            this.option_b = option_b;
         }
+
+//        if (option_d.isEmpty()) {
+//            this.option_d = "null";
+//        } else {
+//            this.option_d = option_d;
+//        }
         this.answer = answer;
         this.timer = timer;
     }
@@ -92,13 +89,13 @@ public class QuestionModel {
         this.option_c = option_c;
     }
 
-    public String getOption_d() {
-        return option_d;
-    }
-
-    public void setOption_d(String option_d) {
-        this.option_d = option_d;
-    }
+//    public String getOption_d() {
+//        return option_d;
+//    }
+//
+//    public void setOption_d(String option_d) {
+//        this.option_d = option_d;
+//    }
 
     public String getAnswer() {
         return answer;
@@ -124,7 +121,7 @@ public class QuestionModel {
                 ", option_a='" + option_a + '\'' +
                 ", option_b='" + option_b + '\'' +
                 ", option_c='" + option_c + '\'' +
-                ", option_d='" + option_d + '\'' +
+//                ", option_d='" + option_d + '\'' +
                 ", timer=" + timer +
                 '}';
     }

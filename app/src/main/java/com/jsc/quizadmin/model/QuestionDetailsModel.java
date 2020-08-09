@@ -12,6 +12,8 @@ public class QuestionDetailsModel {
     String batch;
     String dept;
     String visibility;
+    String userId;
+    String quizType;
 
 
 
@@ -19,14 +21,31 @@ public class QuestionDetailsModel {
     public QuestionDetailsModel() {
     }
 
-    public QuestionDetailsModel(String questionTitle, String courseId, String batch, String dept, String visibility) {
+    public QuestionDetailsModel(String questionTitle, String courseId, String batch, String dept, String visibility, String userId,String quizType) {
         this.questionTitle = questionTitle;
         this.courseId = courseId;
         this.batch = batch;
         this.dept = dept;
         this.visibility = visibility;
+        this.userId = userId;
+        this.quizType = quizType;
     }
 
+    public String getQuizType() {
+        return quizType;
+    }
+
+    public void setQuizType(String quizType) {
+        this.quizType = quizType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getVisibility() {
         return visibility;

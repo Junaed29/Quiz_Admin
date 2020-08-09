@@ -82,7 +82,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/work_sans"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/catagory_edit_UpdateButtonId"
+        app:layout_constraintBottom_toTopOf="@+id/catagory_edit_cancle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catagory_edit_spinnerDepiId"
@@ -95,23 +95,45 @@
         android:id="@+id/catagory_edit_visibility"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/private_btn_bg"
         android:fontFamily="@font/crimson_text"
-        android:padding="10dp"
+        android:padding="5dp"
         android:text="private"
         android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
-        android:textSize="22sp"
+        android:textColor="@color/private_btn_clr"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/catagory_type"
+        app:layout_constraintTop_toTopOf="parent"
+
+
+        />
+
+    <Button
+        android:id="@+id/catagory_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/go_btn_bg"
+        android:fontFamily="@font/work_sans"
+        android:padding="5dp"
+        android:text="Quiz type : Test"
+        android:textAllCaps="true"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/catagory_edit_visibility"
+        app:layout_constraintEnd_toStartOf="@+id/catagory_edit_visibility"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
-        android:id="@+id/catagory_edit_UpdateButtonId"
+        android:id="@+id/catagory_edit_cancle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -119,28 +141,28 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/go_btn_bg"
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="CANCEL"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/catagory_edit_cancel"
+        app:layout_constraintEnd_toStartOf="@+id/catagory_edit_update"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catagory_edit_spinnerBatchId" />
 
     <Button
-        android:id="@+id/catagory_edit_cancel"
+        android:id="@+id/catagory_edit_update"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/go_btn_bg"
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="UPDATE"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/catagory_edit_UpdateButtonId"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/catagory_edit_cancle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/catagory_edit_UpdateButtonId"
-        app:layout_constraintTop_toTopOf="@+id/catagory_edit_UpdateButtonId" />
+        app:layout_constraintStart_toEndOf="@+id/catagory_edit_cancle"
+        app:layout_constraintTop_toTopOf="@+id/catagory_edit_cancle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,18 @@
         tools:layout="@layout/fragment_category_list" >
         <action
             android:id="@+id/action_categoryListFragment_to_questionOperationFragment"
-            app:destination="@id/questionOperationFragment" />
+            app:destination="@id/questionOperationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_categoryListFragment_to_allQuestionListFragment"
+            app:destination="@id/allQuestionListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/questionOperationFragment"
@@ -38,9 +49,122 @@
             android:name="QuizTitle"
             app:argType="string"
             android:defaultValue="null" />
+        <action
+            android:id="@+id/action_questionOperationFragment_to_allQuestionListFragment"
+            app:destination="@id/allQuestionListFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down"
+            app:popUpTo="@id/questionOperationFragment"
+            app:popUpToInclusive="true" />
         <argument
-            android:name="Visibility"
+            android:name="batch"
             app:argType="string"
-            android:defaultValue="private" />
+            android:defaultValue="null" />
+        <argument
+            android:name="dept"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="courseId"
+            app:argType="string"
+            android:defaultValue="null" />
+    </fragment>
+    <fragment
+        android:id="@+id/allQuestionListFragment"
+        android:name="com.jsc.quizadmin.views.AllQuestionListFragment"
+        android:label="fragment_all_question_list"
+        tools:layout="@layout/fragment_all_question_list" >
+        <argument
+            android:name="categoryDocumentId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="quizTitle"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="batch"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="dept"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="courseId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/action_allQuestionListFragment_to_questionOperationFragment"
+            app:destination="@id/questionOperationFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_allQuestionListFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.jsc.quizadmin.views.ResultsFragment"
+        android:label="fragment_results"
+        tools:layout="@layout/fragment_results" >
+        <argument
+            android:name="categoryDocumentId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="quizTitle"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="courseId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="batch"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="dept"
+            app:argType="string"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/action_resultsFragment_to_singleResultFragment"
+            app:destination="@id/singleResultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleResultFragment"
+        android:name="com.jsc.quizadmin.views.SingleResultFragment"
+        android:label="fragment_single_result"
+        tools:layout="@layout/fragment_single_result" >
+        <argument
+            android:name="quizTitle"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="resultDocumentId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="categoryDocumentId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="courseId"
+            app:argType="string"
+            android:defaultValue="null" />
     </fragment>
 </navigation>

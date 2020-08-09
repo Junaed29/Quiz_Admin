@@ -5,38 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:background="@drawable/dark_bg">
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/my_ripple">
 
 
     <TextView
         android:id="@+id/catagory_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/crimson_text"
         android:text="Quiz Title"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/catagory_visibility"
+        app:layout_constraintBottom_toTopOf="@+id/catagory_courseId"
+        app:layout_constraintEnd_toStartOf="@+id/catagory_visibility"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/quizTipeTextView" />
 
     <Button
         android:id="@+id/catagory_visibility"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/private_btn_bg"
         android:fontFamily="@font/crimson_text"
-        android:padding="10dp"
         android:text="private"
         android:textAllCaps="true"
         android:textColor="@color/colorAccent"
-        android:textSize="22sp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/catagory_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/catagory_edit"
+        app:layout_constraintTop_toTopOf="@+id/catagory_title" />
 
     <TextView
         android:id="@+id/catagory_courseId"
@@ -57,41 +63,68 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/work_sans"
-        android:text="Diffucilty"
+        android:text="Department"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/catagory_title" />
+        app:layout_constraintTop_toBottomOf="@+id/catagory_courseId" />
 
     <TextView
         android:id="@+id/catagory_batch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/work_sans"
-        android:text="Diffucilty"
+        android:text="Batch"
         android:textColor="@color/colorLightText"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/catagory_dept"
-        app:layout_constraintTop_toBottomOf="@+id/catagory_title" />
-
+        app:layout_constraintTop_toBottomOf="@+id/catagory_courseId" />
 
 
     <ImageButton
         android:id="@+id/catagory_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/outline_btn_bg"
         android:padding="5dp"
         android:src="@drawable/ic_baseline_edit_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/catagory_dept"
+        app:layout_constraintEnd_toStartOf="@+id/catagory_delete"
+        app:layout_constraintTop_toBottomOf="@+id/catagory_visibility" />
+
+    <ImageButton
+        android:id="@+id/catagory_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/outline_btn_bg"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/catagory_dept"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/catagory_dept" />
+        app:layout_constraintTop_toBottomOf="@+id/catagory_visibility"
+        app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
+
+    <TextView
+        android:id="@+id/quizTipeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/crimson_text"
+        android:text="Quiz Type : Test"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
