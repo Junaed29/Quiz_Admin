@@ -108,7 +108,42 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
 
         floatingActionButton.setOnClickListener(this);
 
+
         setRecyclerView();
+    }
+
+
+    public void setRecyclerView() {
+        Query query = FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
+                .whereEqualTo("userId", userId);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }else {
+                    Toasty.error(getContext(), "Something Wrong\nPlease Check Connection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        FirestoreRecyclerOptions<QuestionDetailsModel> options = new FirestoreRecyclerOptions.Builder<QuestionDetailsModel>()
+                .setQuery(query, QuestionDetailsModel.class)
+                .build();
+
+        categoryAdapter = new AllCategoryAdapter(options, getContext(), this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+
+
+
+        recyclerView.setAdapter(categoryAdapter);
+
+
+        categoryAdapter.startListening();
     }
 
     @Override
@@ -228,33 +263,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
-    public void setRecyclerView() {
-        Query query = FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
-                .whereEqualTo("userId", userId);
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        FirestoreRecyclerOptions<QuestionDetailsModel> options = new FirestoreRecyclerOptions.Builder<QuestionDetailsModel>()
-                .setQuery(query, QuestionDetailsModel.class)
-                .build();
-
-        categoryAdapter = new AllCategoryAdapter(options, getContext(), this);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
-
-        recyclerView.setAnimation(fade_in_Anim);
-
-        recyclerView.setAdapter(categoryAdapter);
-
-
-        categoryAdapter.startListening();
-    }
 
     @Override
     public void categoryItemClicked(DocumentSnapshot snapshot) {
