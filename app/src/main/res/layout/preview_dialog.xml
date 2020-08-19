@@ -192,4 +192,17 @@
         app:layout_constraintEnd_toStartOf="@+id/quiz_progressBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/quiz_progressBar" />
+
+
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:visibility="gone"
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mk_color="#00BFA5"
+        app:mk_type="TwinFishesSpinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

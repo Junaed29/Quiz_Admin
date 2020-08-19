@@ -3,7 +3,6 @@ package com.jsc.quizadmin.views;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +28,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +39,7 @@ import com.jsc.quizadmin.adapters.AllQuestionsAdapter;
 import com.jsc.quizadmin.model.CollectionNameModel;
 import com.jsc.quizadmin.model.QuestionModel;
 import com.shawnlin.numberpicker.NumberPicker;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import es.dmoral.toasty.Toasty;
 
@@ -110,9 +108,9 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (value.size()>0){
+                        if (value.size() > 0) {
                             showResultButton.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             showResultButton.setVisibility(View.GONE);
                         }
                     }
@@ -192,6 +190,8 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
 
         Button cancelButton = dialog.findViewById(R.id.cancel_btn);
         Button confirmButton = dialog.findViewById(R.id.confirm_btn);
+        final MKLoader loader = dialog.findViewById(R.id.loader);
+        loader.setVisibility(View.GONE);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +203,7 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loader.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), "Confirm", Toast.LENGTH_SHORT).show();
                 FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
                         .document(categoryDocumentId)
@@ -217,6 +218,7 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
                                 } else {
                                     Toasty.error(getContext(), "Something Wrong", Toast.LENGTH_LONG).show();
                                 }
+                                loader.setVisibility(View.GONE);
                                 dialog.dismiss();
                             }
                         });
@@ -375,7 +377,7 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.question_fabId){
+        if (v.getId() == R.id.question_fabId) {
             AllQuestionListFragmentDirections.ActionAllQuestionListFragmentToQuestionOperationFragment action = AllQuestionListFragmentDirections.actionAllQuestionListFragmentToQuestionOperationFragment();
             action.setDocumentId(categoryDocumentId);
             action.setQuizTitle(quizTitle);
@@ -384,7 +386,7 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
             action.setCourseId(courseId);
 
             navController.navigate(action);
-        }else if(v.getId()==R.id.results_btn){
+        } else if (v.getId() == R.id.results_btn) {
             AllQuestionListFragmentDirections.ActionAllQuestionListFragmentToResultsFragment action = AllQuestionListFragmentDirections.actionAllQuestionListFragmentToResultsFragment();
             action.setCategoryDocumentId(categoryDocumentId);
             action.setQuizTitle(quizTitle);
@@ -409,6 +411,8 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
         Button optionFourButton = previewDialog.findViewById(R.id.quiz_option_four);
         Button cancelButton = previewDialog.findViewById(R.id.quiz_cancel_btn);
         Button publishButton = previewDialog.findViewById(R.id.quiz_publish_btn);
+        final MKLoader loader = previewDialog.findViewById(R.id.loader);
+        loader.setVisibility(View.GONE);
 
         TextView questionTextView = previewDialog.findViewById(R.id.quiz_question_text);
         TextView timerTextView = previewDialog.findViewById(R.id.quiz_question_time);
@@ -442,8 +446,8 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
             @Override
             public void onClick(View v) {
 
-
-                QuestionModel questionModel = new QuestionModel(question, answer,option_a,option_b,option_c,timer );
+                loader.setVisibility(View.VISIBLE);
+                QuestionModel questionModel = new QuestionModel(question, answer, option_a, option_b, option_c, timer);
 
                 FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
                         .document(categoryDocumentId)
@@ -459,6 +463,7 @@ public class AllQuestionListFragment extends Fragment implements AllQuestionsAda
                                 } else {
                                     Toasty.error(getContext(), "Something Wrong", Toast.LENGTH_LONG).show();
                                 }
+                                loader.setVisibility(View.GONE);
                                 previewDialog.dismiss();
                             }
                         });

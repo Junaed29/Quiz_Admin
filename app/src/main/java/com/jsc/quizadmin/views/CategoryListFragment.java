@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,6 +41,8 @@ import com.jsc.quizadmin.R;
 import com.jsc.quizadmin.adapters.AllCategoryAdapter;
 import com.jsc.quizadmin.model.CollectionNameModel;
 import com.jsc.quizadmin.model.QuestionDetailsModel;
+import com.jsc.quizadmin.utils.NetworkHelper;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +101,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         navController = Navigation.findNavController(view);
 
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d(TAG, "onViewCreated: "+userId);
+        Log.d(TAG, "onViewCreated: " + userId);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.catogory_recycler_view);
         progressBar = view.findViewById(R.id.catogory_progressId);
@@ -120,10 +121,10 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
-                }else {
+                } else {
                     Toasty.error(getContext(), "Something Wrong\nPlease Check Connection", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -139,7 +140,6 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         recyclerView.setHasFixedSize(true);
 
 
-
         recyclerView.setAdapter(categoryAdapter);
 
 
@@ -148,7 +148,11 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        setDialog();
+        if (NetworkHelper.isNetworkAvailable(getContext())) {
+            setDialog();
+        } else {
+            Toasty.error(getContext(), "Please Connect to The Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setDialog() {
@@ -169,6 +173,9 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         final MaterialSpinner batchSpinner = (MaterialSpinner) dialog.findViewById(R.id.spinnerBatchId);
         final Button goButton = (Button) dialog.findViewById(R.id.goButtonId);
         final Button typeButton = (Button) dialog.findViewById(R.id.catagory_type);
+        final MKLoader loader = dialog.findViewById(R.id.loader);
+
+        loader.setVisibility(View.GONE);
 
         deptSpinner.setItems(getResources().getStringArray(R.array.allDepartment));
         batchSpinner.setItems(getResources().getStringArray(R.array.allBatches));
@@ -176,11 +183,11 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         typeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeButton.getText().toString().toLowerCase().contains("test")){
+                if (typeButton.getText().toString().toLowerCase().contains("test")) {
                     quizType = "exercise";
                     typeButton.setText("Quiz type : Exercise");
                     Toasty.info(getContext(), "Student can see their results", Toast.LENGTH_SHORT).show();
-                }else if (typeButton.getText().toString().toLowerCase().contains("exercise")){
+                } else if (typeButton.getText().toString().toLowerCase().contains("exercise")) {
                     quizType = "test";
                     typeButton.setText("Quiz type : Test");
                     Toasty.info(getContext(), "Student can not see their results", Toast.LENGTH_SHORT).show();
@@ -206,12 +213,13 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loader.setVisibility(View.VISIBLE);
                 courseId = courseIdEditText.getText().toString().toUpperCase().trim();
                 quizTitle = quizTitleEditText.getText().toString().trim();
-                if (courseId == null|batch==null|dept==null|quizTitle==null|batch.isEmpty()|courseId.isEmpty()|dept.isEmpty()|quizTitle.isEmpty()){
+                if (courseId == null | batch == null | dept == null | quizTitle == null | batch.isEmpty() | courseId.isEmpty() | dept.isEmpty() | quizTitle.isEmpty()) {
                     Toast.makeText(getContext(), "Please Fill All Value", Toast.LENGTH_SHORT).show();
-                }else {
-                    final QuestionDetailsModel detailsModel = new QuestionDetailsModel(quizTitle,courseId,batch,dept,"private",userId,quizType );
+                } else {
+                    final QuestionDetailsModel detailsModel = new QuestionDetailsModel(quizTitle, courseId, batch, dept, "private", userId, quizType);
 
                     FirebaseFirestore.getInstance()
                             .collection(CollectionNameModel.MAIN_COLLECTION_NAME)
@@ -219,7 +227,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
                             .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Toasty.success(getContext(), "Success", Toast.LENGTH_SHORT).show();
 
                                         CategoryListFragmentDirections.ActionCategoryListFragmentToQuestionOperationFragment action = CategoryListFragmentDirections.actionCategoryListFragmentToQuestionOperationFragment();
@@ -230,9 +238,10 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
                                         action.setCourseId(detailsModel.getCourseId());
 
                                         navController.navigate(action);
-                                    }else {
+                                    } else {
                                         Toasty.error(getContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
                                     }
+                                    loader.setVisibility(View.GONE);
 
                                     dialog.dismiss();
                                 }
@@ -242,21 +251,6 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         });
 
 
-//        goButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Toasty.success(getContext(), "Success", Toast.LENGTH_LONG).show();
-//                CategoryListFragmentDirections.ActionCategoryListFragmentToQuestionOperationFragment action = CategoryListFragmentDirections.actionCategoryListFragmentToQuestionOperationFragment();
-//                action.setDocumentId("i");
-//                action.setQuizTitle("Junaed");
-//                action.setQuizTitle("Junaed");
-//                action.setQuizTitle("Junaed");
-//                navController.navigate(action);
-//                dialog.dismiss();
-//            }
-//        });
-
         dialog.show();
         Window window = dialog.getWindow();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -264,35 +258,51 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
     }
 
 
-
     @Override
     public void categoryItemClicked(DocumentSnapshot snapshot) {
-        QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
-        CategoryListFragmentDirections.ActionCategoryListFragmentToAllQuestionListFragment action = CategoryListFragmentDirections.actionCategoryListFragmentToAllQuestionListFragment();
-        action.setCategoryDocumentId(model.getDocumentId());
-        action.setQuizTitle(model.getQuestionTitle());
-        action.setCourseId(model.getCourseId());
-        action.setBatch(model.getBatch());
-        action.setDept(model.getDept());
-        navController.navigate(action);
+
+        if (NetworkHelper.isNetworkAvailable(getContext())) {
+            QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
+            CategoryListFragmentDirections.ActionCategoryListFragmentToAllQuestionListFragment action = CategoryListFragmentDirections.actionCategoryListFragmentToAllQuestionListFragment();
+            action.setCategoryDocumentId(model.getDocumentId());
+            action.setQuizTitle(model.getQuestionTitle());
+            action.setCourseId(model.getCourseId());
+            action.setBatch(model.getBatch());
+            action.setDept(model.getDept());
+            navController.navigate(action);
+        } else {
+            Toasty.error(getContext(), "Please Connect to The Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void categoryDeleteClicked(DocumentSnapshot snapshot) {
-        QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
-        setCategoryDeleteDialog(model);
+        if (NetworkHelper.isNetworkAvailable(getContext())) {
+            QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
+            setCategoryDeleteDialog(model);
+        } else {
+            Toasty.error(getContext(), "Please Connect to The Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void categoryEditClicked(DocumentSnapshot snapshot) {
-        QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
-        setCategoryEditDialog(model);
+        if (NetworkHelper.isNetworkAvailable(getContext())) {
+            QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
+            setCategoryEditDialog(model);
+        } else {
+            Toasty.error(getContext(), "Please Connect to The Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void categoryVisibilityClicked(DocumentSnapshot snapshot) {
-        QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
-        setCategoryEditDialog(model);
+        if (NetworkHelper.isNetworkAvailable(getContext())) {
+            QuestionDetailsModel model = snapshot.toObject(QuestionDetailsModel.class);
+            setCategoryEditDialog(model);
+        } else {
+            Toasty.error(getContext(), "Please Connect to The Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -303,7 +313,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         final String oldbatch = detailsModel.getBatch();
         final String olddept = detailsModel.getDept();
         final String oldVisibility = detailsModel.getVisibility();
-        final String oldquizType = detailsModel.getQuizType()==null ?  "null" : detailsModel.getQuizType();
+        final String oldquizType = detailsModel.getQuizType() == null ? "null" : detailsModel.getQuizType();
 
         courseId = "";
         batch = detailsModel.getBatch();
@@ -327,6 +337,8 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         final Button cancelButton = (Button) dialog.findViewById(R.id.catagory_edit_cancle);
         final Button visibilityButton = (Button) dialog.findViewById(R.id.catagory_edit_visibility);
         final Button typeButton = (Button) dialog.findViewById(R.id.catagory_type);
+        final MKLoader loader = dialog.findViewById(R.id.loader);
+        loader.setVisibility(View.GONE);
 
         if (detailsModel.getVisibility().equals("public")) {
             isPublic = true;
@@ -343,27 +355,27 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         }
 
 
-        if (detailsModel.getQuizType() == null){
+        if (detailsModel.getQuizType() == null) {
             quizType = "exercise";
             typeButton.setText("Quiz type : Exercise");
-        }else if (detailsModel.getQuizType().toLowerCase().contains("test")){
+        } else if (detailsModel.getQuizType().toLowerCase().contains("test")) {
             quizType = "test";
             typeButton.setText("Quiz type : Test");
-        }else if (detailsModel.getQuizType().toLowerCase().contains("exercise")){
+        } else if (detailsModel.getQuizType().toLowerCase().contains("exercise")) {
             quizType = "exercise";
             typeButton.setText("Quiz type : Exercise");
-        }else {
+        } else {
             quizType = "exercise";
         }
 
         typeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeButton.getText().toString().toLowerCase().contains("test")){
+                if (typeButton.getText().toString().toLowerCase().contains("test")) {
                     quizType = "exercise";
                     typeButton.setText("Quiz type : Exercise");
                     Toasty.info(getContext(), "Student can see their results", Toast.LENGTH_SHORT).show();
-                }else if (typeButton.getText().toString().toLowerCase().contains("exercise")){
+                } else if (typeButton.getText().toString().toLowerCase().contains("exercise")) {
                     quizType = "test";
                     typeButton.setText("Quiz type : Test");
                     Toasty.info(getContext(), "Student can not see their results", Toast.LENGTH_SHORT).show();
@@ -425,6 +437,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loader.setVisibility(View.VISIBLE);
                 courseId = courseIdEditText.getText().toString().toUpperCase().trim();
                 quizTitle = quizTitleEditText.getText().toString().trim();
 
@@ -432,8 +445,8 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
                     Toasty.error(getContext(), "Please Fill All Value", Toast.LENGTH_SHORT).show();
                 } else {
                     String documentId = detailsModel.getDocumentId();
-                    QuestionDetailsModel newDetailsModel = new QuestionDetailsModel(quizTitle, courseId, batch, dept, visibility,userId,quizType);
-                    if (quizTitle.equals(oldquizTitle) && batch.equals(oldbatch) && dept.equals(olddept) && courseId.equals(oldcourseId) && visibility.equals(oldVisibility)&& quizType.equals(oldquizType)) {
+                    QuestionDetailsModel newDetailsModel = new QuestionDetailsModel(quizTitle, courseId, batch, dept, visibility, userId, quizType);
+                    if (quizTitle.equals(oldquizTitle) && batch.equals(oldbatch) && dept.equals(olddept) && courseId.equals(oldcourseId) && visibility.equals(oldVisibility) && quizType.equals(oldquizType)) {
                         Toasty.info(getContext(), "No changed found ", Toast.LENGTH_SHORT).show();
                     } else {
                         FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
@@ -448,6 +461,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
                                         } else {
                                             Toasty.error(getContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
                                         }
+                                        loader.setVisibility(View.GONE);
                                     }
                                 });
                     }
@@ -488,6 +502,8 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
 
         Button cancelButton = dialog.findViewById(R.id.cancel_btn);
         Button confirmButton = dialog.findViewById(R.id.confirm_btn);
+        final MKLoader loader = dialog.findViewById(R.id.loader);
+        loader.setVisibility(View.GONE);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -499,6 +515,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loader.setVisibility(View.VISIBLE);
                 String documentId = detailsModel.getDocumentId();
                 FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
                         .document(documentId)
@@ -511,6 +528,7 @@ public class CategoryListFragment extends Fragment implements View.OnClickListen
                                 } else {
                                     Toasty.error(getContext(), "Something Wrong", Toast.LENGTH_LONG).show();
                                 }
+                                loader.setVisibility(View.GONE);
                                 dialog.dismiss();
                             }
                         });

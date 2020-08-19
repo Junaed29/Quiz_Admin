@@ -106,7 +106,7 @@ public class SingleResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (questionArrayList.size() > 0) {
-                    pdf_creator.permissionForSingleResult(resultModel.getStudentId(),quizTitle,courseId,resultModel,questionArrayList,actualAnswerArrayList,selectedAnswerArrayList);
+                    pdf_creator.permissionForSingleResult(resultModel.getStudentId(), quizTitle, courseId, resultModel, questionArrayList, actualAnswerArrayList, selectedAnswerArrayList);
                 }
             }
         });

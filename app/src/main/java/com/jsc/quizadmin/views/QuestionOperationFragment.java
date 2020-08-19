@@ -23,13 +23,13 @@ import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jsc.quizadmin.R;
 import com.jsc.quizadmin.model.CollectionNameModel;
 import com.jsc.quizadmin.model.QuestionModel;
 import com.shawnlin.numberpicker.NumberPicker;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import es.dmoral.toasty.Toasty;
 
@@ -44,7 +44,7 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
 
     String question = "", answer = "", otherOptionOne = "", otherOptionTwo = "", otherOptionThree = "", timerText = "";
 
-    String option_a = "",option_b = "",option_c= "";
+    String option_a = "", option_b = "", option_c = "";
     int answeringTime = 0;
 
     TextView titleTextView;
@@ -99,11 +99,11 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
         dept = QuestionOperationFragmentArgs.fromBundle(getArguments()).getDept();
 
 
-        questionEditText        = view.findViewById(R.id.questionEditText);
-        answerEditText              = view.findViewById(R.id.answerEditText);
-        otherOption1EditText        = view.findViewById(R.id.otherOption_1EditText);
-        otherOption2EditText        = view.findViewById(R.id.otherOption_2EditText);
-        otherOption3EditText        = view.findViewById(R.id.otherOption_3EditText);
+        questionEditText = view.findViewById(R.id.questionEditText);
+        answerEditText = view.findViewById(R.id.answerEditText);
+        otherOption1EditText = view.findViewById(R.id.otherOption_1EditText);
+        otherOption2EditText = view.findViewById(R.id.otherOption_2EditText);
+        otherOption3EditText = view.findViewById(R.id.otherOption_3EditText);
 
         titleTextView = view.findViewById(R.id.titleTextViewId);
 
@@ -258,6 +258,8 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
         Button optionFourButton = dialog.findViewById(R.id.quiz_option_four);
         Button cancelButton = dialog.findViewById(R.id.quiz_cancel_btn);
         Button publishButton = dialog.findViewById(R.id.quiz_publish_btn);
+        final MKLoader loader = dialog.findViewById(R.id.loader);
+        loader.setVisibility(View.GONE);
 
         TextView questionTextView = dialog.findViewById(R.id.quiz_question_text);
         TextView timerTextView = dialog.findViewById(R.id.quiz_question_time);
@@ -291,7 +293,8 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-                QuestionModel questionModel = new QuestionModel(question, answer,option_a,option_b,option_c,answeringTime );
+                loader.setVisibility(View.VISIBLE);
+                QuestionModel questionModel = new QuestionModel(question, answer, option_a, option_b, option_c, answeringTime);
 
                 FirebaseFirestore.getInstance().collection(CollectionNameModel.MAIN_COLLECTION_NAME)
                         .document(documentId)
@@ -300,8 +303,8 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
                         .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()){
-                                    Toasty.success(getContext(),"Question Set Successful",Toast.LENGTH_LONG).show();
+                                if (task.isSuccessful()) {
+                                    Toasty.success(getContext(), "Question Set Successful", Toast.LENGTH_LONG).show();
                                     dialog.dismiss();
                                     QuestionOperationFragmentDirections.ActionQuestionOperationFragmentToAllQuestionListFragment action = QuestionOperationFragmentDirections.actionQuestionOperationFragmentToAllQuestionListFragment();
                                     action.setCategoryDocumentId(documentId);
@@ -311,12 +314,9 @@ public class QuestionOperationFragment extends Fragment implements View.OnClickL
                                     action.setCourseId(courseId);
                                     navController.navigate(action);
                                 }
+                                loader.setVisibility(View.GONE);
                             }
                         });
-
-                Toasty.success(getContext(),questionModel.toString(),Toast.LENGTH_LONG).show();
-
-                Log.d(TAG, "onClick: "+questionModel.toString());
             }
         });
 

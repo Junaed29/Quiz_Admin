@@ -1,14 +1,12 @@
 package com.jsc.quizadmin.views;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +35,7 @@ public class ResultsFragment extends Fragment implements View.OnClickListener, A
     private static final String TAG = "ResultsFragment";
 
     String categoryDocumentId = "";
-    String quizTitle = "" ,courseId, batch, dept;
+    String quizTitle = "", courseId, batch, dept;
 
     NavController controller;
 
@@ -110,11 +108,11 @@ public class ResultsFragment extends Fragment implements View.OnClickListener, A
 
                             resultModelList = task.getResult().toObjects(StudentResultModel.class);
 
-                            for (StudentResultModel resultModel : resultModelList){
+                            for (StudentResultModel resultModel : resultModelList) {
                                 idArrayList.add(resultModel.getStudentId());
                                 correctArrayList.add(resultModel.getCorrect().toString());
                                 totalQuestionArrayList.add(resultModel.getTotalQuestion());
-                                percentageArrayList.add(getPercentage(resultModel.getCorrect(),resultModel.getWrong(),resultModel.getUnanswered()));
+                                percentageArrayList.add(getPercentage(resultModel.getCorrect(), resultModel.getWrong(), resultModel.getUnanswered()));
                             }
 
                             resultAdapter.setResultModelList(resultModelList);
@@ -132,19 +130,18 @@ public class ResultsFragment extends Fragment implements View.OnClickListener, A
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(), "Pdf Click", Toast.LENGTH_SHORT).show();
 
         Pdf_creator pdf_creator = new Pdf_creator(getContext());
         //pdf_creator.permissionForShowingCodes("Student_Results", idArrayList, totalQuestionArrayList);
-        pdf_creator.permissionForResultDistribution("Student_Results",quizTitle,courseId,batch,dept,idArrayList,totalQuestionArrayList,correctArrayList,percentageArrayList);
+        pdf_creator.permissionForResultDistribution("Student_Results", quizTitle, courseId, batch, dept, idArrayList, totalQuestionArrayList, correctArrayList, percentageArrayList);
     }
 
-    String getPercentage(Long correct,Long wrong,Long unanswered){
+    String getPercentage(Long correct, Long wrong, Long unanswered) {
         long total = correct + wrong + unanswered;
 
         long percent = (correct * 100) / total;
 
-        return percent +"%";
+        return percent + "%";
     }
 
     @Override
